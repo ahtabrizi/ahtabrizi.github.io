@@ -1,17 +1,11 @@
-- title: Student, Harvard CS
-  from: 2014
-  to: 2018
-  description: Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-               sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-               Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-               nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-               reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+- title: Robotics, AutoRo
+  subtitle: (Pishgaman Fanavari Sanat Hooshmand Fartak)
+  from: 2021
+  to: 2023
+  description: As a Robotics and Computer Vision Engineer at Autoro, I led the design and development of a Lane Departure Warning System (LDWS) in compliance with relevant regulations, including COMMISSION REGULATION (EU) No 351/2012, ECE R10, and IEC 60068-2-27. I developed cutting-edge computer vision AI models for LDWS, utilizing ONNX and PyTorch frameworks. Additionally, I played a key role in implementing LDWS, Forward Collision Warning (FCW), and a Driver Monitoring System as part of an Advanced Driver Assistance System (ADAS), using OpenCL and CUDA for hardware-dependent processing and software development in C, C++, and Python. I conducted camera calibration with AI models for precise data acquisition and designed a real-time Camera and AI pipeline on embedded systems (Jetson Nano and Rockchip boards) to enhance data processing efficiency. Furthermore, I developed object detection and odometry capabilities using AI to improve ADAS functionality and implemented control algorithms like PID and model predictive control to steer the vehicle based on input from the vision AI model subprocess.
+  #  As a Robotics Engineer, I led the design and development of a Lane Departure Warning System (LDWS) compliant with industry regulations (EU) No 351/2012, ECE R10, and IEC 60068-2-27, integrating cutting-edge computer vision AI models using ONNX and PyTorch. I also contributed to an Advanced Driver Assistance System (ADAS) by implementing LDWS, Forward Collision Warning (FCW), and Driver Monitoring System, leveraging OpenCL and CUDA for efficient AI model processing. I used C, C++, and Python for software development. I spearheaded the creation of CANnect, a safety-compliant tool for ADAS, enabling data reception and command transmission using the CAN protocol. Additionally, I implemented control algorithms, including PID and model predictive control, to steer vehicles based on vision AI model data.
 
-- title: Software Engineer, Google, UK
-  from: 2018
-  to: present
-  description: Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-               sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-               Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-               nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-               reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+- title: Kavosh Mechanize Fanavar
+  from: 2020
+  to: 2021
+  description: In my role as a Robotics Engineer, I effectively analyzed 100+ hours of inspection robot-captured pipe videos, applying expert knowledge to accurately identify defects. I achieved a remarkable 98 percent accuracy in defect detection and classification through AI model training. I developed a Python software for creating detailed 3D pipe models from video data, seamlessly integrating defect visualization. Leveraging these models, I path-planned the robotic arm of a maintenance robot for precise defect removal. Furthermore, I conducted simulations with various control algorithms, enhancing the performance and efficiency of the maintenance process.

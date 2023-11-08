@@ -1,9 +1,11 @@
 ### Site Settings ###
-title               : Ali Tabruzu
+title               : Ali Tabrizi
+                      # Open to collaboration and inquiries.
 description         : >-
-                      I turn coffee :coffee: into code,
-                      use tabs over spaces
-                      and never broke production.
+                      I'm a Robotics and Computer Vision Engineer, passionate about innovation in the field. 
+                      Explore my projects and contributions to see my work in robotics, computer vision, and AI. 
+
+
 baseurl             : ""                     # Change to empty quotes if you are hosting your site at <your-username>.github.io directly
 repository          : ahtabrizi/ahtabrizi.github.io    # Change to <your-username>/<your-username>.github.io (or remove it if you don't need remote projects)
 remote_theme        : YoussefRaafatNasry/portfolYOU
@@ -25,7 +27,7 @@ nav_exclude:                                            # The following paths ar
 ### Author Info ###
 author:
   name              : Ali Tabrizi
-  image             : https://i.imgur.com/uyDNQnn.jpg
+  image             : assets/profile.jpg
   # behance           : your_usernames
 # dribbble          : your_username
   email             : a.tabrizi.mech@gmail.com
