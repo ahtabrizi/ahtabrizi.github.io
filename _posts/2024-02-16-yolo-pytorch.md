@@ -59,6 +59,7 @@ dataset = VOCDetection(
     ),
 )
 ```
+
 As you can see you have to determine path to store the data (root), year, train or val type, download or load from disk and transforms.
 This is a initial trnsform to convert the loaded image to Tensor and then resize to the shape of model input. Changing the datatype from uint8 to float32 is neceary since we gonna normalize image later.
 
@@ -85,6 +86,7 @@ if self.augment:
     data = TF.adjust_hue(data, 0.2 * random.random() - 0.1)
     data = TF.adjust_saturation(data, 0.2 * random.random() + 0.9)
 ```
+
 These are the original augmentation tehniques that are used in paper. You can add other transformations. But beware to recalculate the bbox locations based on transformations used. Here we have to recalculate for scale and shifts, because only these transformations effect the bbox locations.
 
 ## Normalize
@@ -97,6 +99,7 @@ Normalizing the input image (or any other type of input) usually has lots of ben
 ```python
 data = TF.normalize(data, mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 ```
+
 The reason that everyone uses these values as mean and std is interesting. It is remnant of ImageNet dataset and competitions and it has become defcto standard in many vision applicaitons.
 
 
@@ -160,6 +163,7 @@ class Head_Module(nn.Module):
     def forward(self, x):
         return torch.reshape(self.model.forward(x), (x.size(dim=0), config.S, config.S, self.depth))
 ```
+
 ---------------------------
 # Loss function
 In order to calculate the grdient we need a value to calculate the overall accuracy of the model. In the paper, the loss funcion is. 
@@ -202,6 +206,7 @@ IOU = (Area of Intersection) / (Area of Union)
 #### Process to calculate it:
 1. Get two bboxes, one predicted and one ground truth.
 2. Calculate area of intersetion: use min and max of X and Y of the boxes to get overlap X and Y. Then multiply to get the area. X = x2-x1 and Y = y2-y1. If any of X and Y are smaller than 0 (negative), it means there  no intersection so we clamp it to zero.
+
 ```python
 # Calculate intersection points
 x1 = torch.max(box1_x1, box2_x1)
@@ -213,6 +218,7 @@ y2 = torch.min(box1_y2, box2_y2)
 # Clamp by 0 when there is no intersection
 intersection = (x2 - x1).clamp(0) * (y2 - y1).clamp(0)
 ```
+
 3. calculate the union area:
   union = area_bbox_predicted + area_bbox_ground_truth - intersection_area.
 
@@ -271,6 +277,7 @@ def nms(bboxes, iou_threshold):
             result.append(bboxes[i][0])
     return result
 ```
+
 There is another way to go about nms, in that you use argsort to sort the indices(not the bboxes) and add bbox to result evety loop. This way you have the modify and delete the suppress bbox indices. But in the end they output the same result, maybe I develope the second way later!
 
 ## Loss Code
@@ -278,6 +285,7 @@ There is another way to go about nms, in that you use argsort to sort the indice
     First we calculate the ious for each predition(there are B number of predicitons). Next we find which prediction has the highest IOU. In other words is reponsible for the prediction.
 
     Note this code is written for only B=2. I might upgrde it to use variable B.
+
 ```python
 # Calculate the iou's for each bbox in each cell - (batch, S, S)
 iou_b1 = get_iou(preds[..., 21:25], targets[..., 21:25])
@@ -285,6 +293,7 @@ iou_b2 = get_iou(preds[..., 26:30], targets[..., 26:30])
 
 _, bestbox_indices = torch.max(torch.stack([iou_b1, iou_b2]), dim=0)  # (batch, S, S)
 ```
+
 `bestbox_indices` is a matrix which tells us in each grid cell which prediction is responsible for the detection. In case of B=2, 0 is the first and 1 is the second prediction. (refer to [How it Works](#how-it-works) to understand B)
 
 We are going to use this matrix to calculate obj_ij and later the loss by multiplying it to other matrices. Since any number ecxept 1, will just ruin the loss for that prediction(in case B=2, 0), we have to create a matrix that each value is one if there is object in that cell. To differentite between prediction, we just stack them together. For example in the following code snippet, we stack two `bestbox_indices` together but convert the 0s to 1 for the first matrix.
@@ -293,17 +302,20 @@ We are going to use this matrix to calculate obj_ij and later the loss by multip
 responsible = torch.stack([1 - bestbox_indices, bestbox_indices], dim=-1)
 ```
 - Obj_i: To see if there is object in the ith cell, the fisrt confidene score should be greater than zero.
+
 ```python
 obj_i = targets[..., 20].unsqueeze(3) > 0.0 
 ```
 
 - Obj_ij and noobj_ij:
+
 ```python
 # exists * responsible
 obj_ij = obj_i * responsible
 noobj_ij = 1 - obj_ij
 ```
 - XY loss:
+
 ```python
 # XY losses
 x_loss = self.mse_loss(obj_ij * bbox_attr(preds, 1), obj_ij * bbox_attr(targets, 1))
@@ -332,15 +344,18 @@ height_loss = self.mse_loss(
 )
 wh_loss = width_loss + height_loss
 ```
+
 Note tht we do not use sign and abs functions on target w and h, since we are sure that these values are positive.
 
 - Confidence loss:
+
 ```python
 # Condifdence losses
 obj_confidence_loss = self.mse_loss(obj_ij * bbox_attr(preds, 0), obj_ij * bbox_attr(targets, 0))
 noobj_confidence_loss = self.mse_loss(noobj_ij * bbox_attr(preds, 0), noobj_ij * bbox_attr(targets, 0))
 ```
 - class and total loss:
+
 ```python
 # Class losses
 class_loss = self.mse_loss(obj_i * preds[..., : config.C], obj_i * targets[..., : config.C])
